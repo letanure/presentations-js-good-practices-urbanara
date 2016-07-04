@@ -1,0 +1,784 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/simple.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <section>
+          <div class="fragment">
+            <img src="/img/urbanara.svg" alt="" height="120">
+          </div>
+        </section>
+
+        <section>
+          
+          <section>
+            <h1>Writting Code</h1>
+          </section>
+
+          <section>
+            <h2>Naming things</h2>
+          </section>
+
+          <section>
+            <h3>Naming variables</h3>
+            <p class="fragment">Avoid short or incompreensible names for variables and functions</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// BAD
+var x1; // too short
+var input1; // input for?
+var tabUserActive; // the tab can be inactive?
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Naming Functions</h3>
+            <p class="fragment">Avoid short or incompreensible names for variables and functions</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// BAD: names that describes the code, not the fucntionality
+function olderThan18(age){
+  return age >= 18;
+}
+// GOOD: describe the rule
+function isLegalAge(age){
+  return age >= 18;
+}
+            </code></pre>
+          </section>
+            
+          <section>
+            <h3>Naming in general</h3>
+            <p class="fragment">Create patterns for names</p>
+            <p class="fragment">Examples:</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// $ on start for jquery elements
+var $header    = $('#header');
+var $menuItens = $('#menu a');
+
+// constants
+var IMAGES_PATH = '/assets/images/';
+var CLIENT_NAME = 'Fulan0';
+
+// _ for private values
+var _count = 0;
+
+// use the variable linked to the value
+var termsAccepted // true / false
+var hasVoucher // true / false
+
+// _ try to not mix snake_case and cameCase
+var user_full_name = userFirstName + user_lasName;
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Comments</h2>
+            <p class="fragment">Write comments to help other developers.</p>
+            <p class="fragment">Avoid just copy comments to look good</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// Bad
+/*
+*  @module user
+*  @name get
+*  @params id, number
+*/
+function get( id, name){}
+
+// GOOD
+// get user for given id on localstorage
+function get( id, name){}
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Dont mix technologies</h2>
+            <p class="fragment">Avoid use javascript to create styles or content.</p>
+<pre class="fragment"><code data-trim data-noescape>
+// BAD
+$('.user-name').css({
+  'border'  : '1px solid red',
+  'color'   : 'red'
+});
+// GOOD
+$('.user-name.error').addClass('error');
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Use short syntax</h2>
+            <p class="fragment">Learn about the short notations and use.</p>
+<pre class="fragment"><code data-trim data-noescape>
+// BAD
+var colors = new Array();
+colors[0]='pink';
+colors[1]='blue';
+colors[2]='green';
+// GOOD
+var colors = ['pink', 'blue', 'green'];
+
+// BAD
+if(v){
+   var x = v;
+} else {
+   var x = 10;
+}
+// GOOD
+var x = v || 10;
+
+// BAD
+var direction;
+if(x > 100){
+   direction = 1;
+} else {
+   direction = -1;
+}
+// GOOD
+var direction = (x > 100) ? 1 : -1;
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Configuration</h2>
+            <p class="fragment">Program thinking with configurations</p>
+<pre class="fragment"><code data-trim data-noescape>
+// BAD
+$.ajax({
+  type: "POST",
+  url: "api/users",
+  data: {limit: 10},
+  success: function(data){
+    $('#form').hide();
+    $('#message').text('Search success!!');
+    $('#LIST').html(data).fadeIn('fast');
+  },
+  error: function(){
+    $('#message').text('Error on search');
+  }
+});
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Configuration</h2>
+            <p class="fragment">Program thinking with configurations</p>
+<pre class="fragment"><code data-trim data-noescape>
+// GOOD
+var config: {
+  messages = {
+    success: 'Search success',
+    error: 'Error on search'
+  },
+  api: {
+    users: "api/users"
+  },
+  animate: {
+    velocity: "fast"
+  },
+  list: {
+    perPage: 10
+  }
+}
+//...
+$.ajax({
+  type: "POST",
+  url: config.api.users,
+  data: {limit: config.list.perPage},
+  success: function(data){
+    $('#form').hide();
+    $('#list').text(config.messages.success);
+    $('#lista').html(data).fadeIn(config.animate.velocity);
+  },
+  error: function(){
+    $('#message').text(config.messages.success);
+  }
+});
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Avoid callback hell</h2>
+            <p class="fragment">
+              <img src="img/callback_hell.gif" alt="">
+
+            </p>
+          </section>
+
+          <section>
+            <h2>Avoid callback hell</h2>
+            <pre class="fragment"><code data-trim data-noescape>
+// KILL ME PLEASE
+$('#button').on('click', function(){
+  $.ajax({
+    type: "POST",
+    url: 'users',
+    success: function(data){
+      $('#result').fadeIn('fast', function(){
+        $('#form').animate({
+          heigth: 0, 
+          opacity: 0
+        }, 300, function(){
+            $('#message').animate({
+              heigth: 200,
+              opacity: 1
+            }, 300, function(){
+              //etc etc
+            })
+          }
+        )
+      })
+    },
+    error: function(){
+      $('#message').text(config.messages.success);
+    }
+  });
+});
+          </code></pre>
+          </section>
+
+          <section>
+            <h2>Avoid callback hell</h2>
+            <pre class="fragment"><code data-trim data-noescape>
+// BETTER
+('#button').on('click', function(){
+  loadProducts()  
+});
+
+function loadProducts(){
+  $.ajax({
+    type: "POST",
+    url: 'users',
+    success: function(){
+      showProducts();
+      showMessage('Sucess');
+    },
+    error: showMessage('error')
+  );
+}
+
+function showProducts(){
+  ...
+}
+
+function showMessage(errorType){
+  ...
+}
+          </code></pre>
+          </section>
+
+          <section>
+            <h2>Avoid touching DOM</h2>
+            <pre class="fragment"><code data-trim data-noescape>
+// BAD
+$('#buttonSend').on('click', function(){
+  $(this).prop('disabled', true);
+  $('$myForm').addClass('sending');
+  $.post('ajax/contact', function(data) {
+    $('#message').html(data);
+    $('$myForm').removeClass('sending');
+    $('#buttonSend'),prop('disabled', false);
+  });
+});
+
+// BETTER
+var $buttonSend = $('#buttonSend');
+var $myForm = $('#myForm');
+var $message = $('#message');
+
+$buttonSend.on('click', function(){
+  $buttonSend.prop('disabled', true);
+  $myForm.addClass('sending');
+  $.post('ajax/contact', function(data) {
+    $message.html(data);
+    $myForm.removeClass('sending');
+    $buttonSend.prop('disabled', false);
+  });
+});
+          </code></pre>
+          </section>
+
+          <section>
+            <h2>General</h2>
+            <p class="fragment">Avoid Globals</p>
+            <p class="fragment">Don't use reserved words as keys.</p>
+            <p class="fragment">Code consistency</p>
+            <p class="fragment">Modularize your code</p>
+            <p class="fragment">Think in configurations</p>
+            <p class="fragment">Add functionality with javascript, not content</p>
+            <p class="fragment">Development code </p>
+            <p class="fragment">Avoid excessive optimization</p>
+          </section>
+
+          <section>
+            <h2>Coding style</h2>
+            <p class="fragment">Use the literal syntax new objects and arrays.</p>
+            <p class="fragment">Use single quotes '' for strings.</p>
+            <p class="fragment">Don't use reserved words as keys.</p>
+            <p class="fragment">Use single quotes '' for strings.</p>
+            <p class="fragment">Use Array#join instead of string concatenation.</p>
+            <p class="fragment">Dont declare a function in a non-function block (if, while)</p>
+            <p class="fragment">Use dot notation when accessing properties `product.name` instead of `product['name']`</p>
+            <p class="fragment">Declare unassigned variables last.</p>
+            
+          </section>
+
+          <section>
+            <h2>Coding style</h2>
+            <p class="fragment">Assign variables at the top of their scope</p>
+            <p class="fragment">Use `===` and `!==` over `==` and `!=</p>
+            <p class="fragment">Use braces with all multi-line blocks</p>
+            <p class="fragment">`else if` dont exist in javascript</p>
+            <p class="fragment">Use soft tabs set to 2 spaces.</p>
+            <p class="fragment">Use indentation when making long method chains</p>
+            <p class="fragment">Perform type coercion at the beginning of the statement.</p>
+            <p class="fragment">Use `parseInt with a radix `parseInt(inputValue, 10);`</p>
+          </section>
+
+
+        </section>
+
+        <section>
+          
+          <section>
+            <h1>Code Organization</h1>
+          </section>
+          
+          <section>
+            <h2>Key Concepts</h2>
+          </section>
+          
+          <section>
+            <h3>Modules / Encapsulation</h3>
+            <p class="fragment">Divide the code into units of functionality — modules, services, etc.</p>
+            <p class="fragment">
+              Avoid the temptation to have all of your code in one huge block.
+            </p>
+          </section>
+
+          <section>
+            <h2>Encapsulation</h2>
+            <p class="fragment"> Separate your application into distinct pieces of code and functionality</p>
+            <p class="fragment">We can use 2 patterns for encapsulate code:</p>
+          </section> 
+
+          <section>
+            <h3>Object Literal</h3>
+            <p class="fragment">Object??</p>
+            <p class="fragment"> <s>Everything</s>  is an object </p>
+            <p class="fragment">
+              <small> exception for primives: Strings, Numbers, Booleans, null, undefined </small>
+            </p>
+            <p class="fragment">Object Literal ??</p>
+            <p class="fragment">
+              {}
+            </p>
+          </section>
+
+          <section>
+            <h3>Regular anonymous function with jQuery</h3>
+            <pre><code data-trim data-noescape>
+// Bad
+$( document ).ready(function() {
+  $( "#user_tabs li" ).click(function() {
+      var $item = $( this );
+      $('#content').load( $item.attr( "href" ), function() {
+          $( "#user_tabs li" ).removeClass('active');
+          $item.addClass('active');
+      });
+  });
+});
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Object Literal</h3>
+            <pre><code data-trim data-noescape>
+// Better
+var userModule = {
+
+  init: function( settings ) {
+    ...
+  },
+
+  bindClick: function(  ) {
+    ...
+  },
+
+  loadContentTab: function() { 
+  ... 
+  },
+
+  toggleTab: function() { 
+  ... 
+  }
+
+}
+            </code></pre>
+          </section>
+
+          <section>
+            <h5>WHY???</h5>
+            <p class="fragment">more verbose, but:</p>
+            <p class="fragment">configurations outside logic</p>
+            <p class="fragment">small methods</p>
+            <p class="fragment">clear order of exection </p>
+            <p class="fragment">no  anonymous functions</p>
+          </section>
+
+          <section>
+            <h3>Module Pattern</h3>
+            <div class="fragment">Private variables</div>
+            <div class="fragment">FACADE / public methods</div>
+          </section>
+
+          <section>
+            <h4>With IIFE</h4>
+            <div>Immediately Invoked Function Expression</div>
+            <pre><code data-trim data-noescape>
+var userModule = (function() {
+
+  var ABC;
+  
+  function sum1(){
+    ABC = ABC + 1;
+  }
+  
+  function sum2(){
+    ABC = ABC + 2;
+  }
+
+  return ABC;
+  
+})();
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>FACADE</h4>
+            <pre><code data-trim data-noescape>
+var userModule = (function() {
+
+  var ABC;
+  
+  function sum1(){
+    ABC = ABC + 1;
+  }
+  
+  function sum2(){
+    ABC = ABC + 2;
+  }
+
+  return {
+    plus1: sum1,
+    myValue: ABC;
+  }
+  
+})();
+
+userModule.plus1()
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>IIFE + FACADE + Object literal </h4>
+            <pre><code data-trim data-noescape>
+var userModule = (function() {
+
+  module = {
+    ABC: 10,
+
+    sum1: function(){
+        module.ABC = module.ABC + 1;
+    },
+
+    sum2: function(){
+        module.ABC = module.ABC + 2;
+    },
+
+  }
+
+  return {
+    plus1: module.sum1,
+    myValue: module.ABC;
+  }
+  
+})();
+
+userModule.plus1()
+            </code></pre>
+          </section>
+
+          <section>
+            <h4>IIFE + ~FACADE + Object literal </h4>
+            <pre><code data-trim data-noescape>
+var userModule = (function() {
+
+  var _public = {}
+  var _private = {}
+
+  _private.ABC =  10,
+
+  _public.sum1 = function(){
+        module.ABC = module.ABC + 1;
+  }
+
+  _private.sum2 = function(){
+        module.ABC = module.ABC + 2;
+  }
+
+  return _public;
+  
+})();
+
+userModule.sum1()
+            </code></pre>
+          </section>
+          
+          <section>
+            <h3>
+              DRY
+            </h3>
+            <p class="fragment"><b>D</b>on't <b>R</b>epeat <b>Y</b>ourself</p>
+            <p class="fragment">Identify similarities among pieces of functionality, and use inheritance techniques to avoid repetitive code. </p>
+          </section>
+
+          <section>
+            <h2>Keep Things DRY</h2>
+            <p class="fragment">Don't repeat yourself.</p>
+            <p class="fragment">Try to find pieces of code reusable and put in a function</p>
+            <pre><code data-trim data-noescape>
+// BAD
+$( document ).ready(function() {
+    $( "#tab1 button" ).click( function() { $.ajax( url1 ) });
+    $( "#tab2 button" ).click( function() { $.ajax( url2 ) });
+    $( "#tab3 button" ).click( function() { $.ajax( url3 ) });
+});
+
+// GOOD
+$( document ).ready(function() {
+
+    var bindButton = function(id){
+      $( id ).click( loadResult });
+    }
+    var loadResult = function(url){
+      $.ajax( url3 )
+    }
+
+    bindButton('tab1 button')
+    bindButton('tab2 button')
+    bindButton('tab3 button')
+
+});
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Loose Coupling</h3>
+            <p class="fragment">Units of functionality should be loosely coupled</p>
+            <p class="fragment">Units of functionality should be able to exist on its own, and communication between units should be handled via a messaging system such as custom events or pub/sub</p>
+          </section>
+
+          <section>
+            
+
+          </section> <!-- // Encapsulation -->
+
+        </section><!-- // Code Organization -->
+
+        <section>
+          <section>
+            <h1>Code colaboration</h1>
+          </section>
+          <section>
+            <h2>Don't Fall in Love With Your Own Code!</h2>
+          </section>
+        </section>
+
+
+        <section>
+          <section>
+            <h1>Tools</h1>
+          </section>
+          <section>
+            <h2>JSCS</h2>
+            <p>JSCS joint with jslint</p>
+            <p>with AirbnB presets!</p>
+
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Tests!</h1>
+          </section>
+          <section>
+            <h2>JEST / Mocha / Chai / Dalek</h2>
+          </section>
+        </section>
+
+
+        <section>
+          <section>
+            <h1>Legacy code</h1>
+          </section>
+          <section>
+            <img src="img/legacy-dream.jpg" alt="">
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <div class="fragment">
+              <img src="/img/urbanara.svg" alt="" height="120">
+            </div>
+            <div class="fragment">
+              <img src="/img/add.svg" alt="">
+            </div>
+            <div class="fragment">
+              <img src="/img/jquery.svg" alt="" height="120">
+            </div>
+          </section>
+          
+          <section>
+            <h2>Caching selectors</h2>
+            <p class="fragment">Avoid look for the same element multiple times.</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// BAD
+$( "#tabs button1" ).click( function() { ... });
+$( "#tabs button1" ).hover( function() { ... });
+
+// GOOD
+var $tabsButton1 = $( "#tabs button1" );
+$tabsButton1.click( function() { ... });
+$tabsButton1.hover( function() { ... });
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Caching selectors</h2>
+            <p class="fragment">Better with chaining</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// GOOD
+var $tabsButton1 = $( "#tabs button1" );
+$tabsButton1.click( function() { ... });
+$tabsButton1.hover( function() { ... });
+// BETTER
+var $tabsButton1 = $( "#tabs button1" );
+$tabsButton1
+  .click( function() { ... });
+  .hover( function() { ... });
+            </code></pre>
+            <p class="fragment">In this case, we dont need the variable</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// BETTER
+var $tabsButton1 = $( "#tabs button1" );
+$tabsButton1
+  .click( function() { ... });
+  .hover( function() { ... });
+// EVEN BETTER
+  $( "#tabs button1" );
+    .click( function() { ... });
+    .hover( function() { ... });
+            </code></p
+            re>
+          </section>
+          <section>
+            <h2>Caching selectors & scope</h2>
+            <p class="fragment">If we need bind in multiple buttons in same scope, store the parent;</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// GOOD
+var $tabsButton1 = $( "#tabs button1" );
+var $tabsButton2 = $( "#tabs button2" );
+$tabsButton1.click( function() { ... });
+$tabsButton2.click( function() { ... });
+// BETTER
+var $tabs = = $( "#tabs button1" );
+var $tabsButton1 = $tabs.find( "button1" );
+var $tabsButton2 = $tabs.find( "button2" );
+$tabsButton1.click( function() { ... });
+$tabsButton2.click( function() { ... });
+            </code></pre>
+          </section>
+        
+          <section>
+            <h2>General tips</h2>
+            <p class="fragment">Stay up to date! Update the Jquery versions!</p>
+            <p class="fragment">Use good practices even for small apps and inline page javascript</p>
+            <p class="fragment">Choose the right selectors</p>
+            <p class="fragment">Try to write one action for each line</p>
+            <p class="fragment">Try to write one action for function</p>
+          </section>
+
+          <section>
+            <h2>General tips</h2>
+            <p class="fragment">Dont store data on DOM</p>
+            <pre class="fragment"><code data-trim data-noescape>
+// BAD
+$( "#user" ).data('updated', true);
+$( "#user" ).addClass('updated');
+var isUpdated = $( "#user" ).data('updated');
+var isUpdated = $( "#user" ).hasClass('updated');
+            </code></pre>
+            <p class="fragment">HTML/DOM should be a result of some operation</p>
+          </section>
+        
+        </section>
+
+        <section>
+          <section>
+            <!-- <h1>The future</h1> -->
+            <img src="img/future.jpg" alt="">
+          </section>
+          <section>
+            <h2>ES6 & ES7</h2>
+          </section>
+          <section>
+            <h2>Functional programming</h2>
+          </section>
+          <section>
+            <h2>REACT and others</h2>
+          </section>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
